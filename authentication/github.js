@@ -6,6 +6,17 @@ const url = require('url');
 const GITHUB_URL = "https://github.com/login/oauth/access_token";
 const REDIRECT_URL = 'exp://172.16.1.66:19000/--'
 
+function getUser(access_token){
+   return fetch(
+    'https://api.github.com/user',
+    {
+        method: "GET",
+        headers: {Authorization: `token ${access_token}`}
+    }).then(response=>{
+        return response.json();
+    });
+}
+
 async function handleCallback(req, res){
     // get code from request
     const {code, state} = req.query;
@@ -16,31 +27,25 @@ async function handleCallback(req, res){
 
     let token;
 
-    fetch(tokenUrl ,{
+    fetch(tokenUrl,{
       method: 'POST',
       headers: {Accept: 'application/json'}
     }).then(response=>{
         return response.json();
     }).then(resToken=>{
         token = resToken.access_token;
-        return fetch(
-            'https://api.github.com/user',
-            {
-                method: "GET",
-                headers: {Authorization: `token ${resToken.access_token}`}
-            }
-        )
-    }).then(userPromise=> userPromise.json())
-    .then(user=>{
-        const redirectWithParams = new URL(REDIRECT_URL+'/');
-        redirectWithParams.searchParams.append('uname', user.login);
-        redirectWithParams.searchParams.append('uid', user.id);
-        redirectWithParams.searchParams.append('token', token);
-        console.log(redirectWithParams.href);
-        res.redirect(redirectWithParams.href);
+        return getUser(token)
+    }).then(user=>{
+            const redirectWithParams = new URL(REDIRECT_URL+'/');
+            redirectWithParams.searchParams.append('uname', user.login);
+            redirectWithParams.searchParams.append('uid', user.id);
+            redirectWithParams.searchParams.append('token', token);
+            console.log(redirectWithParams.href);
+            res.redirect(redirectWithParams.href);
     }).catch(e=>console.log("Error Posting to access_token. " + e))
-  }
+}
 
 module.exports = {
     handleCallback,
+    getUser,
 }

@@ -4,6 +4,13 @@ const {ObjectId} = require('mongodb');
 const collectionName = 'maps';
 
 async function insertMap(map) {
+  if(!map)
+  {
+    throw "Invalid mapData provided";
+  }
+  if(!map.name){
+    throw "Invalid mapData. No name provided.";
+  }
   const database = await getDatabase();
   const {insertedId} = await database.collection(collectionName).insertOne(map);
   return insertedId;
