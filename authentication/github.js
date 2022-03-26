@@ -33,6 +33,7 @@ async function handleCallback(req, res){
         const redirectWithParams = new URL(REDIRECT_URL+'/');
         redirectWithParams.searchParams.append('uname', user.login);
         redirectWithParams.searchParams.append('uid', user.id);
+        redirectWithParams.searchParams.append('token', resToken.access_token);
         console.log(redirectWithParams.href);
         res.redirect(redirectWithParams.href);
     }).catch(res=>console.log("Error Posting to access_token"))
