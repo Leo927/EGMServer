@@ -19,21 +19,6 @@ app.use(bodyParser.json());
 app.use('/maps', mapRouter);
 app.use('/oauth2', oauth2Router);
 
-
-
-// // endpoint to delete an ad
-// app.delete('/:id', async (req, res) => {
-//   await deleteAd(req.params.id);
-//   res.send({ message: 'Ad removed.' });
-// });
-
-// // endpoint to update an ad
-// app.put('/:id', async (req, res) => {
-//   const updatedAd = req.body;
-//   await updateAd(req.params.id, updatedAd);
-//   res.send({ message: 'Ad updated.' });
-// });
-
 startDatabase().then(async () => {
   // await insertAd({title: 'Hello, now from the in-memory database!'});
   await insertMap({uid: 'test uid', name: 'test map name'})

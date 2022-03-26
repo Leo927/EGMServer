@@ -1,3 +1,9 @@
+/**
+ * Handles map related APIs
+ * 
+ * Author: Songhao Li
+ */
+
 const express = require("express");
 const {insertMap, getMap, getMaps} = require('../database/maps');
 
