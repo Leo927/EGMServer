@@ -14,13 +14,15 @@ async function handleCallback(req, res){
     tokenUrl.searchParams.append('client_secret', GITHUB_CLIENT_SECRET);
     tokenUrl.searchParams.append('code', code);
 
+    let token;
+
     fetch(tokenUrl ,{
       method: 'POST',
       headers: {Accept: 'application/json'}
     }).then(response=>{
         return response.json();
-        // const {access_token, state, client_id, } = url.searchParams
     }).then(resToken=>{
+        token = resToken.access_token;
         return fetch(
             'https://api.github.com/user',
             {
@@ -33,10 +35,10 @@ async function handleCallback(req, res){
         const redirectWithParams = new URL(REDIRECT_URL+'/');
         redirectWithParams.searchParams.append('uname', user.login);
         redirectWithParams.searchParams.append('uid', user.id);
-        redirectWithParams.searchParams.append('token', resToken.access_token);
+        redirectWithParams.searchParams.append('token', token);
         console.log(redirectWithParams.href);
         res.redirect(redirectWithParams.href);
-    }).catch(res=>console.log("Error Posting to access_token"))
+    }).catch(e=>console.log("Error Posting to access_token. " + e))
   }
 
 module.exports = {
