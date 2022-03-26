@@ -11,10 +11,13 @@ const cors = require("cors");
 
 const {startDatabase} = require('./database/mongo');
 const github = require("./authentication/github");
+const mapRouter = require('./routers/maps');
+const { insertMap } = require("./database/maps");
 
 const app = express();
 app.use(cors({ credentials: true, origin: true }));
 app.use(bodyParser.json());
+app.use('/maps', mapRouter);
 
 app.get('/oauth2/:provider/callback', github.handleCallback);
 
@@ -34,7 +37,7 @@ app.get('/oauth2/:provider/callback', github.handleCallback);
 
 startDatabase().then(async () => {
   // await insertAd({title: 'Hello, now from the in-memory database!'});
-
+  await insertMap({uid: 'test uid', name: 'test map name'})
   const PORT = 3001;
   app.listen(PORT, () => {
     console.log(`Listening at port ${PORT}`);
