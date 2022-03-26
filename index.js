@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const {startDatabase} = require('./database/mongo');
+const {insertMap} = require('./database/maps');
 const mapRouter = require('./routers/maps');
 const oauth2Router = require('./routers/oauth2');
 

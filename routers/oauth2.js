@@ -3,7 +3,7 @@
  */
 
 const express = require("express");
-const github = require("./authentication/github");
+const github = require("../authentication/github");
 
 const router = express.Router();
 
