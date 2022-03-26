@@ -10,16 +10,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const {startDatabase} = require('./database/mongo');
-const github = require("./authentication/github");
 const mapRouter = require('./routers/maps');
-const { insertMap } = require("./database/maps");
+const oauth2Router = require('./routers/oauth2');
 
 const app = express();
 app.use(cors({ credentials: true, origin: true }));
 app.use(bodyParser.json());
 app.use('/maps', mapRouter);
+app.use('/oauth2', oauth2Router);
 
-app.get('/oauth2/:provider/callback', github.handleCallback);
 
 
 // // endpoint to delete an ad
