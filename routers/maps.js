@@ -26,7 +26,7 @@ router.patch('/', async (req, res)=>{
             res.sendStatus(400);
             return;
         }
-        await updateMap(req.body.mapId, req.body.mapData);
+        await updateMap(req.body.mapId, mapData);
         console.log(`Map updated. ${await mapDb.getMap(mapId)}`);
         res.send({mapId});
     }
@@ -93,6 +93,28 @@ router.get('/:mapId', async (req,res)=>{
 router.get('/', async (req, res) => {
     try{
         res.send(await mapDb.getMaps());
+    }
+    catch(e){
+        res.sendStatus(500);
+        console.error(e);
+    }
+});
+
+// delete map by map id
+router.delete('/', async (req, res)=>{
+    try{
+        const {token, mapId} = req.body;
+        if(!token || !mapId){
+            res.sendStatus(400);            
+            return;
+        }   
+        const user = await getUser(token);
+        const map = await mapDb.getMap(mapId);
+        if(user.uid != map.uid){
+            res.sendStatus(403);
+            return;
+        }
+        res.send(await mapDb.deleteMap(mapId));
     }
     catch(e){
         res.sendStatus(500);
