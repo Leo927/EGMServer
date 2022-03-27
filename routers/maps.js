@@ -5,28 +5,29 @@
  */
 
 const express = require("express");
-const {insertMap, getMap, getMaps, updateMap
-    ,getUserMaps} = require('../database/maps');
+const mapDb = require('../database/maps');
 const { getUser } = require("../authentication/github");
 
 const router = express.Router();
 
+// pass route to next handler
 router.use((req, ress, next)=>{
     console.log("Time:", Date.now());
     next();
 });
 
+// update an existing map
 router.patch('/', async (req, res)=>{
     try{
         const {token, mapId, mapData} = req.body;
         const user = await getUser(token);
-        const map = await getMap(mapId);
+        const map = await mapDb.getMap(mapId);
         if(user.uid != map.uid){
             res.sendStatus(400);
             return;
         }
         await updateMap(req.body.mapId, req.body.mapData);
-        console.log(`Map updated. ${await getMap(mapId)}`);
+        console.log(`Map updated. ${await mapDb.getMap(mapId)}`);
         res.send({mapId});
     }
     catch(e){
@@ -35,10 +36,11 @@ router.patch('/', async (req, res)=>{
     }
 });
 
+// get map by user id
 router.get('/owner/:uid', async(req,res)=>{
     try{
         const {uid} = req.params;
-        const maps = await getUserMaps(uid);
+        const maps = await mapDb.getUserMaps(uid);
         res.send(maps);
     }catch(e){
         res.sendStatus(400);
@@ -46,13 +48,14 @@ router.get('/owner/:uid', async(req,res)=>{
     }
 })
 
+// insert a new map
 router.post('/', async (req, res)=>{
     if(!req.body?.token){
         res.sendStatus(400);
         return;
     }
     getUser(req.body.token).then(async (user)=>{
-        const mapId = await insertMap(req.body.mapData);
+        const mapId = await mapDb.insertMap(req.body.mapData);
         console.log(`New map Created. id:${mapId}`);
         res.send({mapId});
     })        
@@ -62,10 +65,11 @@ router.post('/', async (req, res)=>{
     })
 });
 
+// get map by mapId
 router.get('/:mapId', async (req,res)=>{
     try{
         const {mapId} = req.params;
-        const map = await getMap(mapId);
+        const map = await mapDb.getMap(mapId);
         if(!map){
             res.send(404);
             return;
@@ -78,8 +82,15 @@ router.get('/:mapId', async (req,res)=>{
     }
 });
 
+// get all maps
 router.get('/', async (req, res) => {
-    res.send(await getMaps());
+    try{
+        res.send(await mapDb.getMaps());
+    }
+    catch(e){
+        res.sendStatus(500);
+        console.error(e);
+    }
 });
 
 module.exports = router;

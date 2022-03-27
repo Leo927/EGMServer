@@ -66,7 +66,7 @@ code: 400
 ## Get Map by map id
 ### Request
 Method: GET
-Endpoint: <SERVER_ID>/map/owner/<mapId>
+Endpoint: <SERVER_ID>/maps/owner/<mapId>
 Example: curl GET localhost:3001/maps/65121asdasd45
 
 ### Responses
@@ -78,5 +78,18 @@ code: 500
 * Found
 code: 200
 body: requested map
+
+## Get All Maps
+### Request
+Method: GET
+EndPoint: <SERVER_ID>/maps
+Example: curl GET localhost:3001/maps
+
+### Response:
+* Internal Server Error:
+code: 500
+* Success:
+code: 200
+body: all maps
 
 
