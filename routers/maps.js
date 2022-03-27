@@ -26,7 +26,7 @@ router.patch('/', async (req, res)=>{
             res.sendStatus(400);
             return;
         }
-        await updateMap(req.body.mapId, mapData);
+        await mapDb.updateMap(req.body.mapId, mapData);
         console.log(`Map updated. ${await mapDb.getMap(mapId)}`);
         res.send({mapId});
     }

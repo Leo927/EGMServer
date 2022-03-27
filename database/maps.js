@@ -41,7 +41,7 @@ async function getUserMaps(uid){
 async function updateMap(id, map) {
   const database = await getDatabase();
   delete map._id;
-  await database.collection(collectionName).update(
+  await database.collection(collectionName).updateOne(
     { _id: new ObjectId(id), },
     {
       $set: {
