@@ -22,8 +22,6 @@ app.use('/maps', mapRouter);
 app.use('/oauth2', oauth2Router);
 
 startDatabase().then(async () => {
-  // await insertAd({title: 'Hello, now from the in-memory database!'});  
-  await loadDummyData();
   const PORT = 3001;
   app.listen(PORT, () => {
     console.log(`Listening at port ${PORT}`);
