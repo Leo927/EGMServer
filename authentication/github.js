@@ -18,31 +18,38 @@ function getUser(access_token){
 }
 
 async function handleCallback(req, res){
-    // get code from request
-    const {code, state} = req.query;
-    const tokenUrl = new URL(GITHUB_URL);
-    tokenUrl.searchParams.append('client_id', GITHUB_CLIENT_ID);
-    tokenUrl.searchParams.append('client_secret', GITHUB_CLIENT_SECRET);
-    tokenUrl.searchParams.append('code', code);
+    try{
+        // get code from request
+        const {code, state} = req.query;
+        const tokenUrl = new URL(GITHUB_URL);
+        tokenUrl.searchParams.append('client_id', GITHUB_CLIENT_ID);
+        tokenUrl.searchParams.append('client_secret', GITHUB_CLIENT_SECRET);
+        tokenUrl.searchParams.append('code', code);
 
-    let token;
+        const postResponse = await fetch(tokenUrl,{
+            method: 'POST',
+            headers: {Accept: 'application/json'}
+        })
+        const responseJson = await postResponse.json();
+        const token = responseJson.access_token;
 
-    fetch(tokenUrl,{
-      method: 'POST',
-      headers: {Accept: 'application/json'}
-    }).then(response=>{
-        return response.json();
-    }).then(resToken=>{
-        token = resToken.access_token;
-        return getUser(token)
-    }).then(user=>{
-            const redirectWithParams = new URL(REDIRECT_URL+'/');
+        const user = await getUser(token);
+        if(!user){
+            res.sendStatus(400);
+        }
+
+        const redirectWithParams = new URL(REDIRECT_URL+'/');
+        if(user){
             redirectWithParams.searchParams.append('uname', user.login);
             redirectWithParams.searchParams.append('uid', user.id);
             redirectWithParams.searchParams.append('token', token);
-            console.log(redirectWithParams.href);
-            res.redirect(redirectWithParams.href);
-    }).catch(e=>console.log("Error Posting to access_token. " + e))
+        }
+        console.log(`redirecting user to ${redirectWithParams.href}`);
+        res.redirect(redirectWithParams.href);
+    }catch(e){
+        res.sendStatus(500);
+        console.error("Error Posting to access_token. " + e);
+    }
 }
 
 module.exports = {
