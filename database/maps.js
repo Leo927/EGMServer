@@ -18,7 +18,7 @@ async function insertMap(map) {
 
 async function getMap(id) {
   const database = await getDatabase();
-  return await database.collection(collectionName).find({'_id':id}).toArray();
+  return await database.collection(collectionName).find({'_id':new ObjectId(id)}).toArray();
 }
 
 async function getMaps() {
