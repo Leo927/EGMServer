@@ -50,7 +50,7 @@ Client can retrieve these parameters via nodejs URL module.
             top: number representing the distance of the center of the icon from the top of the map. 
             markerGroup: A string pointing to one of the markerGroups from the map. 
 }
-    ```
+```
         
 
 
