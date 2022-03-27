@@ -1,5 +1,7 @@
 # Easy Game Map Server
 ## Table of Content
+[Set Up][#set-up]
+
 [Authentication](#authentication)
 
 [Standard Map Format](#standard-map-data-format)
@@ -12,6 +14,28 @@
 
 [Get All Maps](#get-all-maps)
 
+## Set Up
+1. Install NodeJs
+1. Clone this respository with ```git clone https://github.com/Leo927/EGMServer.git```
+1. ```cd EGMServer```
+1. Install all packages ```npm install .```
+1. Create file called secret.js ```touch secret.js```
+1. Register on MongoDB Atlas. Create a table and get <username> and <password>
+1. From Github Developer, get <client id> and <client secret>
+1. In the Github Dev project, set the callback url to ```<SERVER_URL>/oauth2/callback ```. 
+1. Replace the content of secret.js with 
+```javascript
+const GITHUB_CLIENT_ID = "<client_id>";
+const GITHUB_CLIENT_SECRET = "<client_secret>";
+const ATLAS_MONGODB_ACCOUNT = "<username>";
+const ATLAS_MONGODB_PASSWORD = "<password>";
+module.exports = {
+    GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET,
+    ATLAS_MONGODB_ACCOUNT,
+    ATLAS_MONGODB_PASSWORD,
+}```
+1. Run with ```node .```
 
 ## Authentication
 
