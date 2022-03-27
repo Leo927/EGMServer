@@ -13,6 +13,7 @@ const {startDatabase} = require('./database/mongo');
 const {insertMap} = require('./database/maps');
 const mapRouter = require('./routers/maps');
 const oauth2Router = require('./routers/oauth2');
+const loadDummyData = require('./database/dummydata');
 
 const app = express();
 app.use(cors({ credentials: true, origin: true }));
@@ -21,8 +22,8 @@ app.use('/maps', mapRouter);
 app.use('/oauth2', oauth2Router);
 
 startDatabase().then(async () => {
-  // await insertAd({title: 'Hello, now from the in-memory database!'});
-  await insertMap({uid: 'test uid', name: 'test map name'})
+  // await insertAd({title: 'Hello, now from the in-memory database!'});  
+  await loadDummyData();
   const PORT = 3001;
   app.listen(PORT, () => {
     console.log(`Listening at port ${PORT}`);

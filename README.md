@@ -47,3 +47,36 @@ code: 200
 body: {mapId:<mapId pointing to the map>}
 * fail:
 code: 400
+
+## Get User Maps
+Find all the maps owned by a user. 
+
+### Request
+Method: GET
+Endpoint: <SERVER_URL>/maps/owner/<user id>
+Example: GET <SERVER_URL>/maps/owner/aa54sd55456q. Where aa54sd55456q is the user id. 
+
+### Response
+* success:
+code: 200
+body: json array consisting of all the mapData belonging to the user.
+* fail:
+code: 400
+
+## Get Map by map id
+### Request
+Method: GET
+Endpoint: <SERVER_ID>/map/owner/<mapId>
+Example: curl GET localhost:3001/maps/65121asdasd45
+
+### Responses
+* Map not found:
+code: 404
+* Internal Server Error:
+Errors internal to the server.
+code: 500
+* Found
+code: 200
+body: requested map
+
+

@@ -33,6 +33,11 @@ async function deleteMap(id) {
   });
 }
 
+async function getUserMaps(uid){
+  const database = await getDatabase();
+  return await database.collection(collectionName).find({uid:uid}).toArray();
+}
+
 async function updateMap(id, map) {
   const database = await getDatabase();
   delete map._id;
@@ -51,5 +56,6 @@ module.exports = {
   getMap,
   deleteMap,
   updateMap,
-  getMaps
+  getMaps,
+  getUserMaps,
 };
