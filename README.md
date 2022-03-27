@@ -1,10 +1,15 @@
 # Easy Game Map Server
 ## Table of Content
 [Authentication](#authentication)
+
 [Standard Map Format](#standard-map-data-format)
+
 [Insert Map](#insert)
+
 [Get All Maps of A User](#get-user-maps)
+
 [Get Map by id](#get-map-by-map-id)
+
 [Get All Maps](#get-all-maps)
 
 
