@@ -54,15 +54,22 @@ router.post('/', async (req, res)=>{
         res.sendStatus(400);
         return;
     }
-    getUser(req.body.token).then(async (user)=>{
-        const mapId = await mapDb.insertMap(req.body.mapData);
+    try{
+        const user = await getUser(req.body.token);
+        if(!user)
+        {
+            res.sendStatus(403);
+            return;
+        }
+        const mapData = {uid:user.id, ...req.body.mapData};
+        const mapId = await mapDb.insertMap(mapData);
         console.log(`New map Created. id:${mapId}`);
         res.send({mapId});
-    })        
-    .catch((e)=>{
-        console.log(e);
-        res.sendStatus(400);
-    })
+    }
+    catch(e){
+        console.error(e);
+        res.sendStatus(500);
+    }
 });
 
 // get map by mapId
