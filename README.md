@@ -1,6 +1,6 @@
 # Easy Game Map Server
 ## Table of Content
-[Set Up][#set-up]
+[Set Up](#set-up)
 
 [Authentication](#authentication)
 
