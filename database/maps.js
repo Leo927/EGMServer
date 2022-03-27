@@ -28,7 +28,7 @@ async function getMaps() {
 
 async function deleteMap(id) {
   const database = await getDatabase();
-  await database.collection(collectionName).deleteOne({
+  return await database.collection(collectionName).deleteOne({
     _id: new ObjectId(id),
   });
 }
