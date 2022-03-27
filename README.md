@@ -35,7 +35,7 @@ body: {
 Use http request to update a map. Only entries provided will override existing entry. 
 ### Request
 method: PATCH
-endpoint: <SERVER_URL>/maps/:id
+endpoint: <SERVER_URL>/maps/
 body: {
     token: userToken received via authentication
     mapData: map data object. Can be incomplete map data.
