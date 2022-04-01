@@ -41,7 +41,7 @@ async function deleteMap(id) {
 
 async function getUserMaps(uid){
   const database = await getDatabase();
-  return await database.collection(collectionName).find({uid}).toArray();
+  return await database.collection(collectionName).find({uid}).project({name:1, uid:1}).toArray();
 }
 
 async function updateMap(id, map) {
