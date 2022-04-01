@@ -52,7 +52,28 @@ async function handleCallback(req, res){
     }
 }
 
+/**
+ * Exchange a one time code with an access token
+ * @param {String} code one time code provided by service provider
+ * @returns 
+ */
+async function exchangeAccessToken(code){
+  const tokenUrl = new URL(GITHUB_URL);
+  tokenUrl.searchParams.append('client_id', GITHUB_CLIENT_ID);
+  tokenUrl.searchParams.append('client_secret', GITHUB_CLIENT_SECRET);
+  tokenUrl.searchParams.append('code', code);
+
+  const postResponse = await fetch(tokenUrl,{
+      method: 'POST',
+      headers: {Accept: 'application/json'}
+  })
+  const responseJson = await postResponse.json();
+  const token = responseJson.access_token;
+  return token;
+}
+
 module.exports = {
-    handleCallback,
-    getUser,
+  handleCallback,
+  getUser,
+  exchangeAccessToken
 }
