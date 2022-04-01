@@ -1,4 +1,4 @@
-export default class Map{
+module.exports = class Map{
   constructor(){
       this._id = "";
       this.name = "";

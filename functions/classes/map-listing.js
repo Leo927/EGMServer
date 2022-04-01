@@ -2,7 +2,7 @@
  * This is a data class that is used to reduce the amount of data transferred. 
  * It is a subset of Map. And it only contains small information to be displayed on list. 
  */
- export default class MapListing{
+module.exports = class MapListing{
   constructor(){
     this._id = "";
     this.name = "";
