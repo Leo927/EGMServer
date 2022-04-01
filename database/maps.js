@@ -26,6 +26,12 @@ async function getMaps() {
   return await database.collection(collectionName).find({}).toArray();
 }
 
+async function getMapListing(){
+  const database = await getDatabase();
+  return await database.collection(collectionName).find({}).project({name:1, uid:1}).toArray();
+}
+
+
 async function deleteMap(id) {
   const database = await getDatabase();
   return await database.collection(collectionName).deleteOne({
@@ -58,4 +64,5 @@ module.exports = {
   updateMap,
   getMaps,
   getUserMaps,
+  getMapListing
 };

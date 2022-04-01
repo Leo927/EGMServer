@@ -91,10 +91,10 @@ router.get('/:mapId', async (req,res)=>{
     }
 });
 
-// get all maps
+// get map listing
 router.get('/', async (req, res) => {
     try{
-        res.send(await mapDb.getMaps());
+        res.send(await mapDb.getMapListing());
     }
     catch(e){
         res.sendStatus(500);

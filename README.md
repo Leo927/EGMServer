@@ -80,7 +80,7 @@ Client can retrieve these parameters via nodejs URL module.
             iconId: String representing the id of the icon. See isCustomIcon for more detail of where it comes from. 
             left: number representing the distance of the center of icon from the left edge of the map. 
             top: number representing the distance of the center of the icon from the top of the map. 
-            markerGroup: A string pointing to one of the markerGroups from the map. 
+            markerGroup: A list of strings pointing to several markerGroups from the map. 
 }
 ```
         
