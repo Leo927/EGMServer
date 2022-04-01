@@ -61,7 +61,8 @@ router.post('/', async (req, res)=>{
             res.sendStatus(403);
             return;
         }
-        const mapData = {uid:user.id.toString(), ...req.body.mapData};
+        const mapData = {...req.body.mapData};
+        mapData.uid = user.id.toString();
         if(mapData._id != undefined)
             delete mapData._id;
         const mapId = await mapDb.insertMap(mapData);
