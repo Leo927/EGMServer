@@ -15,28 +15,41 @@
 [Get All Maps](#get-all-maps)
 
 ## Set Up
-1. Install NodeJs
-1. Clone this respository with ```git clone https://github.com/Leo927/EGMServer.git```
-1. ```cd EGMServer```
-1. Create file called secret.js ```touch ./functions/secret.js```
-1. Register on MongoDB Atlas. Create a table and get <username> and <password>
-1. From Github Developer, get <client id> and <client secret>
+1. Install [NodeJs](https://nodejs.org/en/download/).
+1. Clone this respository with 
+
+        git clone https://github.com/Leo927/EGMServer.git
+1. change to directory
+
+        cd EGMServer
+1. Switch to firebase branch
+
+        git checkout firebase
+1. Create file called secret.js 
+
+        touch ./functions/secret.js
+1. Register on MongoDB Atlas. Create a table and get user name and password. 
+1. From Github Developer, get client id and client secret
 1. In the Github Dev project, set the callback url to ```<SERVER_URL>/oauth2/callback ```. 
 1. Replace the content of secret.js with 
-```javascript
-const GITHUB_CLIENT_ID = "<client_id>";
-const GITHUB_CLIENT_SECRET = "<client_secret>";
-const ATLAS_MONGODB_ACCOUNT = "<username>";
-const ATLAS_MONGODB_PASSWORD = "<password>";
-module.exports = {
-    GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET,
-    ATLAS_MONGODB_ACCOUNT,
-    ATLAS_MONGODB_PASSWORD,
-}
-```
-1. Create a new project on firebase and enable functions. Note you must at least at pay grade to use functions.
-1. Deploy to google firebase with ```firebase deploy --only functions```
+
+    ```javascript
+    const GITHUB_CLIENT_ID = "<client_id>";
+    const GITHUB_CLIENT_SECRET = "<client_secret>";
+    const ATLAS_MONGODB_ACCOUNT = "<username>";
+    const ATLAS_MONGODB_PASSWORD = "<password>";
+    module.exports = {
+        GITHUB_CLIENT_ID,
+        GITHUB_CLIENT_SECRET,
+        ATLAS_MONGODB_ACCOUNT,
+        ATLAS_MONGODB_PASSWORD,
+    }
+    ```
+
+1. Create a new project on firebase and enable functions. Note the project must at least be at pay grade to use functions.
+1. Deploy to google firebase
+
+        firebase deploy --only functions
 
 ## Authentication
 
@@ -51,7 +64,10 @@ Use redirect url <SERVER_URL>/oauth2/callback
 
 The server will redirect back to user app. Results are loaded in redirect url as search parameters. 
 
-The returned parameters are: uid, uname, token. 
+The returned body contains the fields:
+* uid
+* uname
+* token
 
 Typical return url looks like: exp://172.16.1.66:19000/--/?uid:<uid>&uname:<uname>&token:<token>
     
@@ -105,6 +121,32 @@ Use http request to insert a new map.
 * fail:
     code: 400
 
+#### Example:
+
+```javascript
+import fetch from 'node-fetch';
+
+const endPoint = SERVER_URL + '/maps';
+
+try {
+  const response = await fetch(endPoint, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      token: user.token,
+      mapData: mapData
+    })
+  });
+  return response.json();
+}
+catch (e) {
+  console.error(e);
+}
+```
+
 ### Patch
 Use http request to update a map. Only entries provided will override existing entry. 
 #### Request
@@ -129,6 +171,28 @@ body: {mapId:<mapId pointing to the map>}
     
 code: 400
 
+#### Example:
+
+```javascript
+import fetch from 'node-fetch';
+
+const endPoint = SERVER_URL + '/maps';
+
+export async function getMaps() {
+  try {
+    const response = await fetch(endPoint);
+    if(!response.ok)
+      throw Error("Failed to get all public maps. " + response.statusText);
+    const responseJson = await response.json();
+    return responseJson;
+  }
+  catch (e) {
+    console.error(`Failed to fetch all public map listings. `+e);
+    return [];
+  }
+}
+```
+
 ### Get User Maps
     
 Find all the maps owned by a user. 
@@ -148,6 +212,29 @@ body: json array consisting of all the mapData belonging to the user.
 * fail:
     
 code: 400
+
+#### Example
+
+
+```javascript
+import fetch from 'node-fetch';
+
+const endPoint = SERVER_URL + '/maps';
+
+export async function getUserMaps(uid) {
+  try {
+    const response = await fetch(endPoint + `/owner/${uid}`, {
+      method: "GET",
+    });
+    const responseJson = await response.json();
+    return responseJson;
+  }
+  catch (e) {
+    console.error(`Failed to get maps by user id ${uid}`);
+    return [];
+  }
+}
+```
 
 ### Get Map by map id
 #### Request
@@ -172,6 +259,24 @@ code: 200
     
 body: requested map
 
+#### Example
+```javascript
+import fetch from 'node-fetch';
+
+const endPoint = SERVER_URL + '/maps';
+
+// Get a map by id. if nothing was found, returns null.
+export async function getMap(mapId) {
+  const response = await fetch(endPoint + `/${mapId}`);
+  if (!response.ok)
+    throw Error("Failed to fetch map. " + response.statusText);
+  const responseJson = await response.json();
+  if (responseJson.length <= 0)
+    throw Error("Failed to fetch map. no map matching id");
+  return responseJson[0];
+}
+```
+
 ### Get All Maps
 #### Request
 * Method: GET    
@@ -189,3 +294,24 @@ code: 200
     
 body: all maps
 
+
+#### Example:
+```javascript
+import fetch from 'node-fetch';
+
+const endPoint = SERVER_URL + '/maps';
+
+export async function getMaps() {
+  try {
+    const response = await fetch(endPoint);
+    if(!response.ok)
+      throw Error("Failed to get all public maps. " + response.statusText);
+    const responseJson = await response.json();
+    return responseJson;
+  }
+  catch (e) {
+    console.error(`Failed to fetch all public map listings. `+e);
+    return [];
+  }
+}
+```
