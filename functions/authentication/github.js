@@ -6,6 +6,12 @@ const url = require('url');
 const GITHUB_URL = "https://github.com/login/oauth/access_token";
 const REDIRECT_URL = 'exp://172.16.1.66:19000/--'
 
+/**
+ * Get the user given access token
+ * @param {string} access_token 
+ * @returns acquired user
+ * @emits Error when user can't be find.
+ */
 async function getUser(access_token){
    const response = await fetch(
     'https://api.github.com/user',
