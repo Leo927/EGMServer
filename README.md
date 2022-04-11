@@ -18,8 +18,7 @@
 1. Install NodeJs
 1. Clone this respository with ```git clone https://github.com/Leo927/EGMServer.git```
 1. ```cd EGMServer```
-1. Install all packages ```npm install .```
-1. Create file called secret.js ```touch secret.js```
+1. Create file called secret.js ```touch ./functions/secret.js```
 1. Register on MongoDB Atlas. Create a table and get <username> and <password>
 1. From Github Developer, get <client id> and <client secret>
 1. In the Github Dev project, set the callback url to ```<SERVER_URL>/oauth2/callback ```. 
@@ -34,8 +33,10 @@ module.exports = {
     GITHUB_CLIENT_SECRET,
     ATLAS_MONGODB_ACCOUNT,
     ATLAS_MONGODB_PASSWORD,
-}```
-1. Run with ```node .```
+}
+```
+1. Create a new project on firebase and enable functions. Note you must at least at pay grade to use functions.
+1. Deploy to google firebase with ```firebase deploy --only functions```
 
 ## Authentication
 
@@ -151,7 +152,7 @@ code: 400
 ### Get Map by map id
 #### Request
 * Method: GET
-* Endpoint: <SERVER_ID>/maps/owner/<mapId>
+* Endpoint: <SERVER_ID>/maps/<mapId>
 * Example: curl GET localhost:3001/maps/65121asdasd45
 
 #### Responses
@@ -187,5 +188,4 @@ code: 500
 code: 200
     
 body: all maps
-
 
