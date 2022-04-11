@@ -3,6 +3,7 @@ const {ObjectId} = require('mongodb');
 
 const collectionName = 'maps';
 
+// insert a map
 async function insertMap(map) {
   if(!map)
   {
@@ -16,22 +17,26 @@ async function insertMap(map) {
   return insertedId;
 }
 
+// get get a map by its id
 async function getMap(id) {
   const database = await getDatabase();
   return await database.collection(collectionName).find({'_id':new ObjectId(id)}).toArray();
 }
 
+// get all public maps
 async function getMaps() {
   const database = await getDatabase();
   return await database.collection(collectionName).find({}).toArray();
 }
 
+// get all public map listings. 
+// returns less information than getMaps. Trying to save data transfer. 
 async function getMapListing(){
   const database = await getDatabase();
   return await database.collection(collectionName).find({}).project({name:1, uid:1}).toArray();
 }
 
-
+// delete a map by id
 async function deleteMap(id) {
   const database = await getDatabase();
   return await database.collection(collectionName).deleteOne({
@@ -39,11 +44,13 @@ async function deleteMap(id) {
   });
 }
 
+// get all maps belonging to a user
 async function getUserMaps(uid){
   const database = await getDatabase();
   return await database.collection(collectionName).find({uid}).project({name:1, uid:1}).toArray();
 }
 
+// update a map. 
 async function updateMap(id, map) {
   const database = await getDatabase();
   delete map._id;
