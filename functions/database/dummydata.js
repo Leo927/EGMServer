@@ -1,6 +1,10 @@
 const {getDatabase} = require('./mongo');
 const maps = require('./maps');
 
+/**
+ * @deprecated Will be removed in the future.
+ * TODO - remove loadDummyData
+ */
 async function loadDummyData(){
     await maps.insertMap({
         uid:'ad4a5sd4a5sd',
